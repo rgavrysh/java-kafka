@@ -1,7 +1,10 @@
 # IntelliJ
 *.iml
 .idea/**
+*.DS_Store
 
 # Java
 *.class
 target/**
+consumer/target/**
+producer/target/**

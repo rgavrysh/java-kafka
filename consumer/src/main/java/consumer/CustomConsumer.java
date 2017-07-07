@@ -1,6 +1,7 @@
 package consumer;
 
 import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.BytesDeserializer;
 import org.apache.kafka.common.serialization.BytesSerializer;
@@ -8,6 +9,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -62,7 +64,19 @@ public class CustomConsumer {
             consumerProperties.put(ConsumerConfig.CLIENT_ID_CONFIG, "simple");
 
             kafkaConsumer = new KafkaConsumer<String, String>(consumerProperties);
-            kafkaConsumer.subscribe(Arrays.asList(topicName));
+            kafkaConsumer.subscribe(Arrays.asList(topicName), new ConsumerRebalanceListener() {
+                @Override
+                public void onPartitionsRevoked(Collection<TopicPartition> collection) {
+                    System.out.printf("%s topic-partitions are revoked from this consumer.\n",
+                            Arrays.toString(collection.toArray()));
+                }
+
+                @Override
+                public void onPartitionsAssigned(Collection<TopicPartition> collection) {
+                    System.out.printf("%s topic-partitions are assigned to this consumer.\n",
+                            Arrays.toString(collection.toArray()));
+                }
+            });
 
             // Processing messages
             try {
