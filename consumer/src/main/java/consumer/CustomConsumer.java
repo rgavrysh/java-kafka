@@ -9,8 +9,6 @@ import java.util.*;
 
 public class CustomConsumer {
 
-    private static Scanner in;
-    private static boolean stop = false;
     private static long offset = 0;
 
     public static void main(String[] args) throws InterruptedException {
@@ -18,11 +16,11 @@ public class CustomConsumer {
             System.err.printf("Usage: %s <topicName> <groupId> <startingOffset>\n",
                     CustomConsumer.class.getSimpleName());
             System.exit(-1);
-        } else if (args.length == 3){
+        } else if (args.length == 3) {
             offset = Long.valueOf(args[2]);
         }
 
-        in = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
         String topicName = args[0];
         String groupId = args[1];
 
@@ -64,8 +62,8 @@ public class CustomConsumer {
             consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
 
 
-            kafkaConsumer = new KafkaConsumer<String, String>(consumerProperties);
-            kafkaConsumer.subscribe(Arrays.asList(topicName), new ConsumerRebalanceListener() {
+            kafkaConsumer = new KafkaConsumer<>(consumerProperties);
+            kafkaConsumer.subscribe(Collections.singletonList(topicName), new ConsumerRebalanceListener() {
                 @Override
                 public void onPartitionsRevoked(Collection<TopicPartition> collection) {
                     System.out.printf("%s topic-partitions are revoked from this consumer.\n",
@@ -87,39 +85,39 @@ public class CustomConsumer {
                         } else if (startingOffset == -1) {
                             System.out.println("Setting offset to the end.");
                             kafkaConsumer.seekToEnd(collection);
-                    } else {
+                        } else {
                             System.out.printf("Resetting partition to " + startingOffset);
                             kafkaConsumer.seek(topicPartition, startingOffset);
                         }
+                    }
                 }
-            }
-        });
+            });
 
-        // Processing messages
+            // Processing messages
             try
 
-        {
-            while (true) {
-                ConsumerRecords<String, String> records = kafkaConsumer.poll(1000);
-                for (ConsumerRecord<String, String> record : records) {
-                    System.out.println(record.toString());
+            {
+                while (true) {
+                    ConsumerRecords<String, String> records = kafkaConsumer.poll(1000);
+                    for (ConsumerRecord<String, String> record : records) {
+                        System.out.println(record.toString());
+                    }
                 }
+            } catch (
+                    WakeupException ex)
+
+            {
+                System.out.println("Exception caught. " + ex.getMessage());
+            } finally
+
+            {
+                kafkaConsumer.close();
+                System.out.println("KafkaConsumer closed.");
             }
-        } catch(
-        WakeupException ex)
+        }
 
-        {
-            System.out.println("Exception caught. " + ex.getMessage());
-        } finally
-
-        {
-            kafkaConsumer.close();
-            System.out.println("KafkaConsumer closed.");
+        KafkaConsumer<String, String> getKafkaConsumer() {
+            return kafkaConsumer;
         }
     }
-
-    public KafkaConsumer<String, String> getKafkaConsumer() {
-        return kafkaConsumer;
-    }
-}
 }

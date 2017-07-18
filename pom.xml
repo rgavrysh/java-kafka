@@ -20,6 +20,11 @@
             <artifactId>kafka-clients</artifactId>
             <version>0.11.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+            <version>0.11.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -27,11 +32,6 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <!--<archive>-->
-                        <!--<manifest>-->
-                            <!--<mainClass>consumer.CustomConsumer</mainClass>-->
-                        <!--</manifest>-->
-                    <!--</archive>-->
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
@@ -52,6 +52,7 @@
     <modules>
         <module>producer</module>
         <module>consumer</module>
+        <module>stream</module>
     </modules>
 
 </project>
