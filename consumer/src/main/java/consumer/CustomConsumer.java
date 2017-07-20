@@ -3,6 +3,7 @@ package consumer;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
+import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.util.*;
@@ -94,28 +95,20 @@ public class CustomConsumer {
             });
 
             // Processing messages
-            try
-
-            {
+            try {
                 while (true) {
                     ConsumerRecords<String, String> records = kafkaConsumer.poll(1000);
                     for (ConsumerRecord<String, String> record : records) {
                         System.out.println(record.toString());
                     }
                 }
-            } catch (
-                    WakeupException ex)
-
-            {
+            } catch (WakeupException ex) {
                 System.out.println("Exception caught. " + ex.getMessage());
-            } finally
-
-            {
+            } finally {
                 kafkaConsumer.close();
                 System.out.println("KafkaConsumer closed.");
             }
         }
-
         KafkaConsumer<String, String> getKafkaConsumer() {
             return kafkaConsumer;
         }
