@@ -8,3 +8,4 @@
 target/**
 consumer/target/**
 producer/target/**
+stream/target/**
