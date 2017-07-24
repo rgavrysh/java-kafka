@@ -18,5 +18,6 @@ Topic will be deleted if all consumers are closed before producer, otherwise you
 3) Start console producer for input topic ```./bin/kafka-console-producer.sh --broker-list localhost:9092 --topic stream-input-file```
 4) Start word-count stream ```java -jar target/stream-1.0-SNAPSHOT-jar-with-dependencies.jar```
 5) Start consumer of output stream ```./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic stream-output --from-beginning --property print.key=true --property print.value=true --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer```
+6) To make direct query to state store via REST request, open in your browser http://localhost:8081/word-count/kafka-table/{word}, where ```{word}``` is a path parameter. Example: http://localhost:8081/word-count/kafka-table/message -> as a result you'll get text/plain response with the count-number, like: 34.
 
 Provide messages to 'stream-input-file' topic, you will see them in a word-count console output as a key => value pair (btw. key is null) as well as updates in a KTable, after data being calculated (number of words) then redirected to stream-output topic, check result in the stream-output consumer console.
