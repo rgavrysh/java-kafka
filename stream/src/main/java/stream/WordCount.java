@@ -20,10 +20,10 @@ public class WordCount {
         final String DEFAULT_BOOTSTRAP_SERVERS = "localhost:9092";
         final String DEFAULT_SCHEMA_REGISTRY_URL = "http://localhost:8081";
         if (args.length == 0 || args.length > 4) {
-            throw new IllegalArgumentException("usage ... <portForRestEndpoint>\n" +
-                    "[<bootsrtapServers> (optional, default: " + DEFAULT_BOOTSTRAP_SERVERS + ")]" +
-                    "[<schemaRegistryUrl> (optional, default: " + DEFAULT_SCHEMA_REGISTRY_URL + ")]" +
-                    "[<hostnameForRestEndpoint> (optional, default: " + DEFAULT_REST_ENDPOINT_HOSTNAME + ")]");
+            throw new IllegalArgumentException("\nusage ... <portForRestEndpoint>" +
+                    "\n[<bootsrtapServers> (optional, default: " + DEFAULT_BOOTSTRAP_SERVERS + ")]" +
+                    "\n[<schemaRegistryUrl> (optional, default: " + DEFAULT_SCHEMA_REGISTRY_URL + ")]" +
+                    "\n[<hostnameForRestEndpoint> (optional, default: " + DEFAULT_REST_ENDPOINT_HOSTNAME + ")]");
         }
 
         final Integer restEndpointPort = Integer.valueOf(args[0]);

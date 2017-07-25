@@ -31,6 +31,7 @@ public class WordCountRestService {
     @Path("/kafka-table/{word}")
     @Produces(MediaType.TEXT_PLAIN)
     public String getKTable(@PathParam("word") final String word) {
+        System.out.println("http request handling ...");
         return String.valueOf(kafkaStreams.store(WordCount.stateStoreName,
                 QueryableStoreTypes.<String, Long>keyValueStore()).get(word));
     }
@@ -40,9 +41,6 @@ public class WordCountRestService {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.setContextPath("/");
 
-        jettyServer = new Server(hostInfo.port());
-        jettyServer.setHandler(servletContextHandler);
-
         ResourceConfig resourceConfig = new ResourceConfig();
         resourceConfig.register(this);
         resourceConfig.register(JacksonFeature.class);
@@ -51,6 +49,9 @@ public class WordCountRestService {
         ServletHolder servletHolder = new ServletHolder(servletContainer);
 
         servletContextHandler.addServlet(servletHolder, "/*");
+
+        jettyServer = new Server(hostInfo.port());
+        jettyServer.setHandler(servletContextHandler);
         jettyServer.start();
     }
 
