@@ -1,0 +1,19 @@
+version: '2'
+services:
+  zookeeper:
+    image: kafka:2
+    command: ./bin/zookeeper-server-start.sh config/zookeeper.properties
+  kafka-server:
+    image: kafka:2
+    depends_on:
+      - zookeeper
+    command: ./bin/kafka-server-start.sh config/server.properties --override zookeeper.connect=zookeeper:2181
+    links:
+     - zookeeper
+  stream-app:
+    image: stream-app:1
+    command: java -jar stream.jar 8081 kafka-server:9092
+    links:
+     - kafka-server
+    ports:
+     - "8081:8081"
